@@ -34,10 +34,11 @@ namespace LeMondCsvToTcxConverter
         private XmlWriter xmlWriter;
         private bool inActivity;
         private List<LapPoint> lapPoints;
-
-        public TcxWriter(TextWriter textWriter)
+        private bool useUniversalTime;
+        public TcxWriter(TextWriter textWriter, bool useUniversalTime)
         {
-            xmlWriter = XmlWriter.Create(textWriter);
+            this.xmlWriter = XmlWriter.Create(textWriter);
+            this.useUniversalTime = useUniversalTime;
         }
 
         public void StartTcx()
@@ -84,7 +85,7 @@ namespace LeMondCsvToTcxConverter
 
             // write the Id
             xmlWriter.WriteStartElement("Id", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(startTime);
+            xmlWriter.WriteValue(ConvertDateTime(startTime));
             xmlWriter.WriteEndElement();
         }
 
@@ -107,7 +108,7 @@ namespace LeMondCsvToTcxConverter
             
             // StartTime attribute
             xmlWriter.WriteStartAttribute("StartTime");
-            xmlWriter.WriteValue(startTime.ToUniversalTime());
+            xmlWriter.WriteValue(ConvertDateTime(startTime));
             xmlWriter.WriteEndAttribute();
 
             lapPoints = new List<LapPoint>();
@@ -118,33 +119,15 @@ namespace LeMondCsvToTcxConverter
             LapStats stats = new LapStats();
 
             // write out the stats that must be writen out first
-            // TotalTime
             stats.TotalTimeSeconds = (lapPoints.Last().Time.Value - lapPoints.First().Time.Value).TotalSeconds;
-            xmlWriter.WriteStartElement("TotalTimeSeconds", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(stats.TotalTimeSeconds);
-            xmlWriter.WriteEndElement();
-
-            // DistanceMeters
             stats.DistanceMeters = lapPoints.Last().ElapsedDistanceMeters.Value - lapPoints.First().ElapsedDistanceMeters.Value;
-            xmlWriter.WriteStartElement("DistanceMeters", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(stats.DistanceMeters);
-            xmlWriter.WriteEndElement();
-
-            // Calories
             stats.Calories = lapPoints.Last().ElapsedCalories.Value;
-            xmlWriter.WriteStartElement("Calories", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(stats.Calories);
-            xmlWriter.WriteEndElement();
 
-            // Intensity
-            xmlWriter.WriteStartElement("Intensity", TcxV2XmlNamespace);
-            xmlWriter.WriteValue("Active");
-            xmlWriter.WriteEndElement();
-
-            //TriggerMethod
-            xmlWriter.WriteStartElement("TriggerMethod", TcxV2XmlNamespace);
-            xmlWriter.WriteValue("Manual");
-            xmlWriter.WriteEndElement();
+            WriteElementAndValue("TotalTimeSeconds", TcxV2XmlNamespace, stats.TotalTimeSeconds);
+            WriteElementAndValue("DistanceMeters", TcxV2XmlNamespace, stats.DistanceMeters);
+            WriteElementAndValue("Calories", TcxV2XmlNamespace, stats.Calories);
+            WriteElementAndValue("Intensity", TcxV2XmlNamespace, "Active");
+            WriteElementAndValue("TriggerMethod", TcxV2XmlNamespace, "Manual");
 
             // write out each of the track points
             xmlWriter.WriteStartElement("Track", TcxV2XmlNamespace);
@@ -153,41 +136,6 @@ namespace LeMondCsvToTcxConverter
                 WriteTrackPoint(point);
             }
             xmlWriter.WriteEndElement();
-
-
-            //// write out the lap extension stats
-            //xmlWriter.WriteStartElement("Extensions", TcxV2XmlNamespace);
-
-            //stats.MaxCadence = lapPoints.Max(lp => lp.Cadence.Value);
-            //xmlWriter.WriteStartElement("LX", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteStartElement("MaxBikeCadence", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteValue(stats.MaxCadence);
-            //xmlWriter.WriteEndElement();
-            //xmlWriter.WriteEndElement();
-
-            //stats.AverageSpeedMetersPerSecond = lapPoints.Average(lp => lp.SpeedMetersPerSecond.Value);
-            //xmlWriter.WriteStartElement("LX", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteStartElement("AvgSpeed", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteValue(stats.AverageSpeedMetersPerSecond);
-            //xmlWriter.WriteEndElement();
-            //xmlWriter.WriteEndElement();
-
-            //stats.AveragePowerWatts = (int)Math.Round(lapPoints.Average(lp => lp.PowerWatts.Value));
-            //xmlWriter.WriteStartElement("LX", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteStartElement("AvgWatts", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteValue(stats.AveragePowerWatts);
-            //xmlWriter.WriteEndElement();
-            //xmlWriter.WriteEndElement();
-
-            //stats.MaxPowerWatts = lapPoints.Max(lp => lp.PowerWatts.Value);
-            //xmlWriter.WriteStartElement("LX", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteStartElement("MaxWatts", ActivityExtensionsV2XmlNamespace);
-            //xmlWriter.WriteValue(stats.MaxPowerWatts);
-            //xmlWriter.WriteEndElement();
-            //xmlWriter.WriteEndElement();
-
-            //// </Extensions>
-            //xmlWriter.WriteEndElement();
 
             // </Lap>
             xmlWriter.WriteEndElement();
@@ -200,33 +148,17 @@ namespace LeMondCsvToTcxConverter
         {
             xmlWriter.WriteStartElement("Trackpoint", TcxV2XmlNamespace);
             
-            xmlWriter.WriteStartElement("Time", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(point.Time.Value.ToUniversalTime());
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement("DistanceMeters", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(point.ElapsedDistanceMeters.Value);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement("HeartRateBpm", TcxV2XmlNamespace);
-            WriteValueElement(point.HeartRateBpm.Value);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement("Cadence", TcxV2XmlNamespace);
-            xmlWriter.WriteValue(point.Cadence.Value);
-            xmlWriter.WriteEndElement();
+            WriteElementAndValue("Time", TcxV2XmlNamespace, ConvertDateTime(point.Time.Value));
+            WriteElementAndValue("DistanceMeters", TcxV2XmlNamespace, point.ElapsedDistanceMeters.Value);
+            WriteElementAndValueElement("HeartRateBpm", TcxV2XmlNamespace, point.HeartRateBpm.Value);
+            WriteElementAndValue("Cadence", TcxV2XmlNamespace, point.Cadence.Value);
 
             // Extensions
             xmlWriter.WriteStartElement("Extensions", TcxV2XmlNamespace);
             xmlWriter.WriteStartElement("TPX", ActivityExtensionsV2XmlNamespace);
-            
-            xmlWriter.WriteStartElement("Speed", ActivityExtensionsV2XmlNamespace);
-            xmlWriter.WriteValue(point.SpeedMetersPerSecond.Value);
-            xmlWriter.WriteEndElement();
-            
-            xmlWriter.WriteStartElement("Watts", ActivityExtensionsV2XmlNamespace);
-            xmlWriter.WriteValue(point.PowerWatts.Value);
-            xmlWriter.WriteEndElement();
+
+            WriteElementAndValue("Speed", ActivityExtensionsV2XmlNamespace, point.SpeedMetersPerSecond.Value);
+            WriteElementAndValue("Watts", ActivityExtensionsV2XmlNamespace, point.PowerWatts.Value);
             
             // </TPX>
             xmlWriter.WriteEndElement();
@@ -234,6 +166,31 @@ namespace LeMondCsvToTcxConverter
             xmlWriter.WriteEndElement();
             
             // </TrackPoint>
+            xmlWriter.WriteEndElement();
+        }
+
+        private object ConvertDateTime(DateTime dateTime)
+        {
+            if (useUniversalTime)
+            {
+                return dateTime.ToUniversalTime();
+            }
+
+            // makes GMT look like local time
+            return new DateTime(dateTime.ToLocalTime().Ticks, DateTimeKind.Utc);
+        }
+
+        private void WriteElementAndValue(string localName, string xmlNamespace, object value)
+        {
+            xmlWriter.WriteStartElement(localName, xmlNamespace);
+            xmlWriter.WriteValue(value);
+            xmlWriter.WriteEndElement();
+        }
+
+        private void WriteElementAndValueElement(string localName, string xmlNamespace, object value)
+        {
+            xmlWriter.WriteStartElement(localName, xmlNamespace);
+            WriteValueElement(value);
             xmlWriter.WriteEndElement();
         }
 
