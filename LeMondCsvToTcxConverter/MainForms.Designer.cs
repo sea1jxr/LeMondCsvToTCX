@@ -50,9 +50,9 @@
             // 
             // lstFiles
             // 
-            this.lstFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lstFiles.FormattingEnabled = true;
             this.lstFiles.Location = new System.Drawing.Point(9, 46);
             this.lstFiles.Name = "lstFiles";
@@ -93,6 +93,7 @@
             // 
             // chkUseLocalTime
             // 
+            this.chkUseLocalTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkUseLocalTime.AutoSize = true;
             this.chkUseLocalTime.Checked = true;
             this.chkUseLocalTime.CheckState = System.Windows.Forms.CheckState.Checked;
