@@ -1,6 +1,5 @@
 # a comment - this is ignored
 
-
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
@@ -29,3 +28,7 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+*.vsmdi
+
+#Ignore files build by NCrunch
+*.local.xml

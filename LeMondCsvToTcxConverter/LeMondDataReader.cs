@@ -68,11 +68,6 @@ namespace LeMondCsvToTcxConverter
                 }
             }
         }
-
-        private TimeSpan ConvertToTimespan(string p)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }
