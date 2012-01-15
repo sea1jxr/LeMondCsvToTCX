@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using Microsoft.VisualBasic.FileIO;
 
 namespace LeMondCsvToTcxConverter
 {
-    public class FileLeMondCsvDataProvider : ILeMondDataProvider
+    public class LeMondGForceCsvDataProvider : ILeMondDataProvider
     {
         private string startData;
         private string startTime;
         private TextFieldParser parser;
 
-        public FileLeMondCsvDataProvider(string fileName)
+        public LeMondGForceCsvDataProvider(TextReader reader, string fileName)
         {
-            parser = new TextFieldParser(fileName);
+            parser = new TextFieldParser(reader);
             parser.TextFieldType = FieldType.Delimited;
             parser.Delimiters = new [] { "," };
             if (parser.EndOfData)

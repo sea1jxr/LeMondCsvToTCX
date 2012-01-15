@@ -59,7 +59,7 @@ namespace LeMondCsvToTcxConverter
                     LapStats stats = new LapStats() { Calories = 0, DistanceMeters = 0, TotalTimeSeconds = 0 };
                     foreach (var item in lstFiles.Items)
                     {
-                        var provider = new FileLeMondCsvDataProvider((string)item);
+                        var provider = new LeMondGForceCsvDataProvider(new StreamReader((string)item), Path.GetFileName((string)item));
                         var reader = new LeMondDataReader(provider);
                         if (firstFile)
                         {

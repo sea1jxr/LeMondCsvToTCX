@@ -14,7 +14,5 @@ namespace LeMondCsvToTcxConverter
         public string HeartRate { get; set; }
         public string Rpm { get; set; }
         public string Calories { get; set; }
-        public string Torque { get; set; }
-        public string TargetHr { get; set; }
     }
 }
