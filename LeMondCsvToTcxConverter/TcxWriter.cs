@@ -19,10 +19,6 @@ namespace LeMondCsvToTcxConverter
         public double TotalTimeSeconds { get; set; }
         public double DistanceMeters { get; set; }
         public int Calories { get; set; }
-        //public int MaxCadence { get; set; }
-        //public double AverageSpeedMetersPerSecond { get; set; }
-        //public int AveragePowerWatts { get; set; }
-        //public int MaxPowerWatts { get; set; }
     }
 
     public class TcxWriter : IDisposable
@@ -34,11 +30,9 @@ namespace LeMondCsvToTcxConverter
         private XmlWriter xmlWriter;
         private bool inActivity;
         private List<LapPoint> lapPoints;
-        private bool useUniversalTime;
-        public TcxWriter(TextWriter textWriter, bool useUniversalTime)
+        public TcxWriter(TextWriter textWriter)
         {
             this.xmlWriter = XmlWriter.Create(textWriter);
-            this.useUniversalTime = useUniversalTime;
         }
 
         public void StartTcx()
@@ -118,24 +112,32 @@ namespace LeMondCsvToTcxConverter
         {
             LapStats stats = new LapStats();
 
-            // write out the stats that must be writen out first
-            stats.TotalTimeSeconds = (lapPoints.Last().Time.Value - lapPoints.First().Time.Value).TotalSeconds;
-            stats.DistanceMeters = lapPoints.Last().ElapsedDistanceMeters.Value - lapPoints.First().ElapsedDistanceMeters.Value;
-            stats.Calories = lapPoints.Last().ElapsedCalories.Value;
+            if (lapPoints.Count > 0)
+            {
+                // collect the stats from the points
+                stats.TotalTimeSeconds = (lapPoints.Last().Time.Value - lapPoints.First().Time.Value).TotalSeconds;
+                stats.DistanceMeters = lapPoints.Max(p => p.ElapsedDistanceMeters.Value);
+                stats.Calories = lapPoints.Last().ElapsedCalories.Value;
+            }
 
+            // write out the status before we write out the track points
+            // as required by the schema
             WriteElementAndValue("TotalTimeSeconds", TcxV2XmlNamespace, stats.TotalTimeSeconds);
             WriteElementAndValue("DistanceMeters", TcxV2XmlNamespace, stats.DistanceMeters);
             WriteElementAndValue("Calories", TcxV2XmlNamespace, stats.Calories);
             WriteElementAndValue("Intensity", TcxV2XmlNamespace, "Active");
             WriteElementAndValue("TriggerMethod", TcxV2XmlNamespace, "Manual");
 
-            // write out each of the track points
-            xmlWriter.WriteStartElement("Track", TcxV2XmlNamespace);
-            foreach (var point in lapPoints)
+            if (lapPoints.Count > 0)
             {
-                WriteTrackPoint(point);
+                // write out each of the track points
+                xmlWriter.WriteStartElement("Track", TcxV2XmlNamespace);
+                foreach (var point in lapPoints)
+                {
+                    WriteTrackPoint(point);
+                }
+                xmlWriter.WriteEndElement();
             }
-            xmlWriter.WriteEndElement();
 
             // </Lap>
             xmlWriter.WriteEndElement();
@@ -171,13 +173,7 @@ namespace LeMondCsvToTcxConverter
 
         private object ConvertDateTime(DateTime dateTime)
         {
-            if (useUniversalTime)
-            {
-                return dateTime.ToUniversalTime();
-            }
-
-            // makes GMT look like local time
-            return new DateTime(dateTime.ToLocalTime().Ticks, DateTimeKind.Utc);
+            return dateTime.ToUniversalTime();
         }
 
         private void WriteElementAndValue(string localName, string xmlNamespace, object value)

@@ -52,7 +52,7 @@ namespace LeMondCsvToTcxConverter
             {
                 TimeSpan oneSecond = new TimeSpan(0, 0, 1);
                 using(TextWriter textWriter = new StreamWriter(dialog.FileName))
-                using (TcxWriter writer = new TcxWriter(textWriter, !chkUseLocalTime.Checked))
+                using (TcxWriter writer = new TcxWriter(textWriter))
                 {
                     writer.StartTcx();
                     bool firstFile = true;

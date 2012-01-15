@@ -33,7 +33,6 @@
             this.btnAddFile = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnRemoveAll = new System.Windows.Forms.Button();
-            this.chkUseLocalTime = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnCreateTcx
@@ -50,9 +49,9 @@
             // 
             // lstFiles
             // 
-            this.lstFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstFiles.FormattingEnabled = true;
             this.lstFiles.Location = new System.Drawing.Point(9, 46);
             this.lstFiles.Name = "lstFiles";
@@ -91,25 +90,11 @@
             this.btnRemoveAll.UseVisualStyleBackColor = true;
             this.btnRemoveAll.Click += new System.EventHandler(this.btnRemoveAll_Click);
             // 
-            // chkUseLocalTime
-            // 
-            this.chkUseLocalTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkUseLocalTime.AutoSize = true;
-            this.chkUseLocalTime.Checked = true;
-            this.chkUseLocalTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUseLocalTime.Location = new System.Drawing.Point(12, 218);
-            this.chkUseLocalTime.Name = "chkUseLocalTime";
-            this.chkUseLocalTime.Size = new System.Drawing.Size(100, 17);
-            this.chkUseLocalTime.TabIndex = 5;
-            this.chkUseLocalTime.Text = "Use Local Time";
-            this.chkUseLocalTime.UseVisualStyleBackColor = true;
-            // 
             // MainForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(592, 253);
-            this.Controls.Add(this.chkUseLocalTime);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnRemoveAll);
             this.Controls.Add(this.btnAddFile);
@@ -118,7 +103,6 @@
             this.Name = "MainForms";
             this.Text = "LeMondCsvToTcx";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -129,7 +113,6 @@
         private System.Windows.Forms.Button btnAddFile;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnRemoveAll;
-        private System.Windows.Forms.CheckBox chkUseLocalTime;
     }
 }
 

@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileLeMondCsvDataProvider.cs" />
+    <Compile Include="LeMondGForceCsvDataProvider.cs" />
     <Compile Include="ILeMondDataProvider.cs" />
     <Compile Include="LeMondDataReader.cs" />
     <Compile Include="LeMondCsvDataLine.cs" />
