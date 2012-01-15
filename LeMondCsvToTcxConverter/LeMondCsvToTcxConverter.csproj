@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter.cs" />
     <Compile Include="LeMondGForceCsvDataProvider.cs" />
     <Compile Include="ILeMondDataProvider.cs" />
     <Compile Include="LeMondDataReader.cs" />

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionAssert.cs" />
+    <Compile Include="TestConverter.cs" />
     <Compile Include="TestLeMondGForceCsvDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockLeMondDataProvider.cs" />

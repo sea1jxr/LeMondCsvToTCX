@@ -147,14 +147,20 @@ namespace TestCsvToTcxConverter
             Assert.AreEqual("1", point.Cadence);
             Assert.AreEqual("3.3", point.DistanceMeters);
             Assert.AreEqual("4", point.HeartRateBpm);
-            Assert.AreEqual("1", point.Watts);
-            Assert.AreEqual("1", point.Speed);
-            Assert.AreEqual("", point.Time);
+            Assert.AreEqual("5", point.Watts);
+            Assert.AreEqual("6.6", point.Speed);
+            Assert.AreEqual("0007-08-09T10:11:12Z", point.Time);
 
             // track point 2
             point = lap.TrackPoints.Last();
-
+            Assert.AreEqual("13", point.Cadence);
+            Assert.AreEqual("15.15", point.DistanceMeters);
+            Assert.AreEqual("16", point.HeartRateBpm);
+            Assert.AreEqual("17", point.Watts);
+            Assert.AreEqual("18.18", point.Speed);
+            Assert.AreEqual("0019-12-21T22:23:24Z", point.Time);
         }
+
         private IEnumerable<TcxActivity> GetActivities(XElement root)
         {
             var activities = root.DescendantsAndSelf().Where(e => e.Name == trainingCenterv2 + "Activities");
@@ -283,7 +289,7 @@ namespace TestCsvToTcxConverter
                 get
                 {
                     var heartRate = trackPointElement.Element(trainingCenterv2 + "HeartRateBpm");
-                    return heartRate.Element(trainingExtensionsv2 + "Value").Value;
+                    return heartRate.Element(trainingCenterv2 + "Value").Value;
                 }
             }
 
