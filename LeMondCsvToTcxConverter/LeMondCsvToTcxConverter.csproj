@@ -48,11 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter.cs" />
+    <Compile Include="LeMondCsvDataProvider.cs" />
     <Compile Include="LeMondGForceCsvDataProvider.cs" />
     <Compile Include="ILeMondDataProvider.cs" />
     <Compile Include="LeMondDataReader.cs" />
     <Compile Include="LeMondCsvDataLine.cs" />
     <Compile Include="LeMondDataPoint.cs" />
+    <Compile Include="LeMondRevolutionCsvDataProvider.cs" />
     <Compile Include="MainForms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +63,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourcedReader.cs" />
     <Compile Include="TcxWriter.cs" />
     <EmbeddedResource Include="MainForms.resx">
       <DependentUpon>MainForms.cs</DependentUpon>

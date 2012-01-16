@@ -10,7 +10,7 @@ namespace LeMondCsvToTcxConverter
     {
         const int MetersPerKilometer = 1000;
         const double HoursPerSecond = 1.0 / (60.0 * 60.0);
-        public void WriteTcxFile(IEnumerable<TextReader> laps, TextWriter textWriter)
+        public void WriteTcxFile(IEnumerable<SourcedReader> laps, TextWriter textWriter)
         {
             TimeSpan oneSecond = new TimeSpan(0, 0, 1);
             using (TcxWriter writer = new TcxWriter(textWriter))
@@ -20,7 +20,7 @@ namespace LeMondCsvToTcxConverter
                 LapStats stats = new LapStats() { Calories = 0, DistanceMeters = 0, TotalTimeSeconds = 0 };
                 foreach (var lap in laps)
                 {
-                    var provider = new LeMondGForceCsvDataProvider(lap, "lap1");
+                    var provider = LeMondCsvDataProvider.Create(lap);
                     var reader = new LeMondDataReader(provider);
                     if (firstFile)
                     {

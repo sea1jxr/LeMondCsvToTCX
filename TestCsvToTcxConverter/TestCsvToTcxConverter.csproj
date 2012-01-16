@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -48,11 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionAssert.cs" />
+    <Compile Include="LeMondConcreateProviderCtorHelper.cs" />
     <Compile Include="TestConverter.cs" />
+    <Compile Include="TestLeMondCsvDataProvider.cs" />
     <Compile Include="TestLeMondGForceCsvDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockLeMondDataProvider.cs" />
     <Compile Include="TestLeMondDataReader.cs" />
+    <Compile Include="TestLeMondRevolutionCsvDataProvider.cs" />
     <Compile Include="TestTcxWriter.cs" />
   </ItemGroup>
   <ItemGroup>

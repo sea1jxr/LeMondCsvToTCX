@@ -7,8 +7,7 @@ namespace LeMondCsvToTcxConverter
 {
     public interface ILeMondDataProvider
     {
-        string StartDate { get; }
-        string StartTime { get; }
+        DateTime StartTime { get; }
         IEnumerable<LeMondCsvDataLine> DataLines { get; }
     }
 }

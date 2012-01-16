@@ -8,9 +8,7 @@ namespace TestCsvToTcxConverter
 {
     class MockLeMondDataProvider : ILeMondDataProvider
     {
-        public string StartDate { get; set; }
-
-        public string StartTime { get; set; }
+        public DateTime StartTime { get; set; }
 
         public IEnumerable<LeMondCsvDataLine> DataLines { get; set; }
     }

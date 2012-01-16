@@ -55,7 +55,7 @@ namespace LeMondCsvToTcxConverter
                     {
                         paths.Add((string)item);
                     }
-                    new Converter().WriteTcxFile(paths.Select(p => new StreamReader(p)), textWriter);
+                    new Converter().WriteTcxFile(paths.Select(p => new SourcedReader() { Source = Path.GetFileName(p), TextReader = new StreamReader(p) }), textWriter);
                 }
                 MessageBox.Show(string.Format("File '{0}' was created successfully", dialog.FileName));
             }
