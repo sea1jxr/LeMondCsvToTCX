@@ -1,7 +1,7 @@
 ﻿Installation
 ------------
-Just download this file, unzip the contents to a folder you want to run it from, then just run the .exe
-(https://github.com/sea1jxr/LeMondCsvToTCX/downloads)
+Just download the lastest version [here] (https://github.com/sea1jxr/LeMondCsvToTCX/downloads), unzip the contents to a folder you want to run it from, then just run the .exe
+
  
 Usage Instructions
 ------------------
