@@ -82,22 +82,22 @@ namespace LeMondCsvToTcxConverter
 
         public static void ParseDate(string date, out int year, out int month, out int day)
         {
+            DateTime dateTime;
+            if (!DateTime.TryParse(date, out dateTime))
+            {
+                throw new Exception("The start date is not in the correct format, it is expected to be in a 'DD-MMM' or 'MM/DD' format");
+            }
+            
             var now = DateTime.Now;
             year = now.Year;
-            if (date == null || date.Length != 6 ||
-                !(
-                   int.TryParse(date.Substring(0, 2), out day) &&
-                   TryGetMonth(date.Substring(3, 3), out month)
-                 )
-               )
-            {
-                throw new Exception("The start date is not in the correct format, it is expected to be in a 'DD-MMM' format");
-            }
+            month = dateTime.Month;
+            day = dateTime.Day;
 
-            if (now.Month < month)
+            if (dateTime.Year == now.Year && now.Month < month)
             {
+                // a year wasn't provided, and 
                 // since we aren't to this month
-                // we can assume it was last year.
+                // we will assume it was last year.
                 year -= 1;
             }
         }

@@ -44,8 +44,7 @@ TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
         {
             var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
             var provider = new LeMondRevolutionCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
-            int curentMonth = DateTime.Now.Month;
-            int year = curentMonth < 3 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+            int year = CalculateYear(3);
             Assert.AreEqual(new DateTime(year, 3, 30, 18, 33, 17, DateTimeKind.Local), provider.StartTime);
 
             // lines
@@ -60,7 +59,33 @@ TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
             Assert.AreEqual(line.Calories, "7");
         }
 
+        private static int CalculateYear(int month)
+        {
+            return DateTime.Now.Month < month ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+        }
+
         int year, month, day, hour, minute, second;
+
+        [TestMethod]
+        public void TestAbbreviatedMonthFormat()
+        {
+            LeMondRevolutionCsvDataProvider.ParseDate("31-Dec", out year, out month, out day);
+            Assert.AreEqual(31, day);
+            Assert.AreEqual(12, month);
+            Assert.AreEqual(CalculateYear(month), year);
+
+        }
+
+        [TestMethod]
+        public void TestShortNoYearFormat()
+        {
+            LeMondRevolutionCsvDataProvider.ParseDate("12/31", out year, out month, out day);
+            Assert.AreEqual(31, day);
+            Assert.AreEqual(12, month);
+            Assert.AreEqual(CalculateYear(month), year);
+
+        }
+
         [TestMethod]
         public void ErrorOnDateToShort()
         {
