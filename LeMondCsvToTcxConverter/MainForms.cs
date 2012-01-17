@@ -48,16 +48,23 @@ namespace LeMondCsvToTcxConverter
             dialog.FileName = Path.GetFileNameWithoutExtension((string)lstFiles.Items[0]);
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                using (TextWriter textWriter = new StreamWriter(dialog.FileName))
+                try
                 {
-                    List<string> paths = new List<string>();
-                    foreach(var item in lstFiles.Items)
+                    using (TextWriter textWriter = new StreamWriter(dialog.FileName))
                     {
-                        paths.Add((string)item);
+                        List<string> paths = new List<string>();
+                        foreach (var item in lstFiles.Items)
+                        {
+                            paths.Add((string)item);
+                        }
+                        new Converter().WriteTcxFile(paths.Select(p => new SourcedReader() { Source = Path.GetFileName(p), TextReader = new StreamReader(p) }), textWriter);
                     }
-                    new Converter().WriteTcxFile(paths.Select(p => new SourcedReader() { Source = Path.GetFileName(p), TextReader = new StreamReader(p) }), textWriter);
+                    MessageBox.Show(string.Format("File '{0}' was created successfully", dialog.FileName));
                 }
-                MessageBox.Show(string.Format("File '{0}' was created successfully", dialog.FileName));
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, String.Format("Error creating the TCX file: \r\n{0}\r\n\r\nDetails:\r\n{1}", ex.Message, ex.ToString()), "Error creating TCX file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

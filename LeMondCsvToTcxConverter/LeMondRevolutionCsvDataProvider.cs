@@ -13,6 +13,11 @@ namespace LeMondCsvToTcxConverter
     /// LeMond, Revolution,FW 50,HW 02,30-Mar,18:33:17,Alt 30,Temp 25,Hum 45,Tire 2105,CF 150
     /// TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
     /// 0:00:01,0,0,0,72,0,0,0,,,
+    /// or
+    /// LeMond, Revolution,FW 50,HW 02,08/20,16:48:28,Alt 1432,Temp 25,Hum 46,Tire 2097,CF 150
+    /// TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET
+    /// 0:00:01,017.9,000.0,0060,000,071,0000,180<PWR<133,
+
     /// </summary>
     public class LeMondRevolutionCsvDataProvider : LeMondCsvDataProvider
     {
