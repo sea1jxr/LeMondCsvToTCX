@@ -48,6 +48,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestCompuTrainer3DPFileProvider.cs" />
     <Compile Include="ExceptionAssert.cs" />
     <Compile Include="LeMondConcreateProviderCtorHelper.cs" />
     <Compile Include="TestConverter.cs" />
@@ -64,6 +65,11 @@
       <Project>{5F2CF072-11A7-4C24-8BCC-5D19E0479F0B}</Project>
       <Name>LeMondCsvToTcxConverter</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Samples\CompuTrainer\John-CompuTrainer_TimeTrial-2012-01-04-21-44-16.3dp">
+      <Link>John-CompuTrainer_TimeTrial-2012-01-04-21-44-16.3dp</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

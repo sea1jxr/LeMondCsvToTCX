@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompuTrainer3DPFileProvider.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="LeMondCsvDataProvider.cs" />
     <Compile Include="LeMondGForceCsvDataProvider.cs" />
