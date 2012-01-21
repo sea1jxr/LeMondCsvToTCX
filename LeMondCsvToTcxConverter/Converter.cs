@@ -8,11 +8,9 @@ namespace LeMondCsvToTcxConverter
 {
     public class Converter
     {
-        const int MetersPerKilometer = 1000;
-        const double HoursPerSecond = 1.0 / (60.0 * 60.0);
+        
         public void WriteTcxFile(IEnumerable<SourcedReader> laps, TextWriter textWriter)
         {
-            TimeSpan oneSecond = new TimeSpan(0, 0, 1);
             using (TcxWriter writer = new TcxWriter(textWriter))
             {
                 writer.StartTcx();
@@ -22,27 +20,18 @@ namespace LeMondCsvToTcxConverter
                 {
                     var provider = LeMondCsvDataProvider.Create(lap);
                     var reader = new LeMondDataReader(provider);
+                    var data = new LeMondTcxData(reader);
                     if (firstFile)
                     {
-                        writer.StartActivity(reader.StartTime, TcxSport.Biking);
+                        writer.StartActivity(data.StartTime, data.Sport);
                         firstFile = false;
                     }
 
-                    writer.StartLap(reader.StartTime);
+                    writer.StartLap(data.StartTime);
 
-                    bool firstPoint = true;
-                    foreach (var point in reader.DataPoints)
+                    foreach (var point in data.TrackPoints)
                     {
-                        if (firstPoint)
-                        {
-                            // adding a fake first point becuase strava seems
-                            // to like seeing seconds 0:00-1:00 for a minute instead of 0:01-1:00
-                            // this new point will actually give us 61 points, but will be considerd
-                            // a full minute
-                            WriteTrackPoint(writer, stats, reader.StartTime - oneSecond, point);
-                            firstPoint = false;
-                        }
-                        WriteTrackPoint(writer, stats, reader.StartTime, point);
+                        WriteTrackPoint(writer, stats, point);
                     }
 
                     stats = writer.EndLap();
@@ -52,16 +41,16 @@ namespace LeMondCsvToTcxConverter
             }
         }
 
-        private static void WriteTrackPoint(TcxWriter writer, LapStats stats, DateTime baseTime, LeMondDataPoint point)
+        private static void WriteTrackPoint(TcxWriter writer, LapStats stats, TcxTrackPoint point)
         {
             writer.StartTrackPoint();
-            writer.WriteTrackPointTime(baseTime + point.ElapsedTime);
-            writer.WriteTrackPointCadence(point.CadenceRotationsPerMinute);
+            writer.WriteTrackPointTime(point.Time);
+            writer.WriteTrackPointCadence(point.CadenceRpm);
             writer.WriteTrackPointElapsedCalories(point.ElapsedCalories + stats.Calories);
-            writer.WriteTrackPointElapsedDistanceMeters(point.DistanceKilometers * MetersPerKilometer + stats.DistanceMeters);
-            writer.WriteTrackPointHeartRateBpm(point.HeartRateBeatsPerMinute);
+            writer.WriteTrackPointElapsedDistanceMeters(point.ElapsedDistanceMeters + stats.DistanceMeters);
+            writer.WriteTrackPointHeartRateBpm(point.HeartRateBpm);
             writer.WriteTrackPointPowerWatts(point.PowerWatts);
-            writer.WriteTrackPointSpeedMetersPerSecond(point.SpeedKilometersPerHour * MetersPerKilometer * HoursPerSecond);
+            writer.WriteTrackPointSpeedMetersPerSecond(point.SpeedMetersPerSecond);
             writer.EndTrackPoint();
         }
 

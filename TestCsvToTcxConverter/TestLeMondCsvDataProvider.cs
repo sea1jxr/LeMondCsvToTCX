@@ -29,13 +29,13 @@ namespace TestCsvToTcxConverter
             Source = "nonRecognizedType"
         };
 
-        SourcedReader gforceType = new SourcedReader()
+        public SourcedReader gforceType = new SourcedReader()
         {
             TextReader = new StringReader("LeMond,,,gforce,120102,16:31\r\nTIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR"),
             Source = "gforceType"
         };
 
-        SourcedReader revolutionType = new SourcedReader()
+        public SourcedReader revolutionType = new SourcedReader()
         {
             TextReader = new StringReader("LeMond,Revolution,,,30-Mar,18:33:17\r\nTIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET"),
             Source = "revolutionType"
