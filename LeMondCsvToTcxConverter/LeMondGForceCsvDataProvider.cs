@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
     /// <summary>
     /// 

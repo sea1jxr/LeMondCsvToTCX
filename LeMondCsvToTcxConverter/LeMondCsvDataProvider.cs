@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
     public abstract class LeMondCsvDataProvider : ILeMondDataProvider
     {
@@ -27,30 +27,31 @@ namespace LeMondCsvToTcxConverter
             get { return parser; }
         }
 
-        public static ILeMondDataProvider Create(SourcedReader reader)
+        public static ILeMondDataProvider Create(SourcedStream sourcedStream)
         {
-            var parser = new TextFieldParser(reader.TextReader);
+            
+            var parser = new TextFieldParser(sourcedStream.Stream);
             parser.TextFieldType = FieldType.Delimited;
             parser.Delimiters = new[] { "," };
             if (parser.EndOfData)
             {
-                throw new Exception(string.Format("The file {0} does not seem to be a valid LeMond .csv file because it is empty.", reader.Source));
+                throw new Exception(string.Format("The file {0} does not seem to be a valid LeMond .csv file because it is empty.", sourcedStream.Source));
             }
 
             var row = parser.ReadFields();
             if (!(row.Length >= 1 && row[0] == "LeMond"))
             {
-                throw new Exception(string.Format("The file {0} does not seem to be a valid LeMond .csv file because it doesn't say 'LeMond' in the first field.", reader.Source));
+                throw new Exception(string.Format("The file {0} does not seem to be a valid LeMond .csv file because it doesn't say 'LeMond' in the first field.", sourcedStream.Source));
             }
 
             
             if (row.Length >= 4 && row[3] == "gforce")
             {
-                return new LeMondGForceCsvDataProvider(reader.Source, parser, row);
+                return new LeMondGForceCsvDataProvider(sourcedStream.Source, parser, row);
             }
             else if (row.Length >= 2 && row[1] == "Revolution")
             {
-                return new LeMondRevolutionCsvDataProvider(reader.Source, parser, row);
+                return new LeMondRevolutionCsvDataProvider(sourcedStream.Source, parser, row);
             }
 
             throw new Exception(string.Format("Not a recognized LeMond device. Header = '{0}'", string.Join(",", row)));

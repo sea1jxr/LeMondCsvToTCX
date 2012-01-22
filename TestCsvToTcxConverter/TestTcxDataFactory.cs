@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LeMondCsvToTcxConverter;
+using ConvertToTcx;
 using System.IO;
 
 namespace TestCsvToTcxConverter
@@ -11,8 +11,8 @@ namespace TestCsvToTcxConverter
     [TestClass]
     public class TestTcxDataFactory
     {
-        SourcedReader lemondReader = new SourcedReader() { Source = "joe.csv", TextReader = new StringReader(string.Empty) };
-        SourcedReader computrainerReader = new SourcedReader() { Source = "joe.3dp", TextReader = new StringReader(string.Empty) };
+        SourcedStream lemondReader = new SourcedStream() { Source = "joe.csv", Stream = Util.CreateStream(string.Empty) };
+        SourcedStream computrainerReader = new SourcedStream() { Source = "joe.3dp", Stream = Util.CreateStream(string.Empty) };
         TestTcxData lemondData = new TestTcxData();
         TestTcxData computrainerData = new TestTcxData();
 
@@ -38,7 +38,7 @@ namespace TestCsvToTcxConverter
         public void ErrorOnBadExtension()
         {
            var factory = new TcxDataFactory(null, null);
-           Exception e = ExceptionAssert.Throws<Exception>(() => factory.Create(new SourcedReader() { Source = "joe.zzz" }));
+           Exception e = ExceptionAssert.Throws<Exception>(() => factory.Create(new SourcedStream() { Source = "joe.zzz" }));
            StringAssert.Contains(e.Message, ".zzz");
            StringAssert.Contains(e.Message, "not a supported file type");
         }
@@ -61,7 +61,7 @@ namespace TestCsvToTcxConverter
 
         private class TestTcxData : ITcxData
         {
-            public SourcedReader Reader { get; set; }
+            public SourcedStream Reader { get; set; }
 
             public DateTime StartTime
             {

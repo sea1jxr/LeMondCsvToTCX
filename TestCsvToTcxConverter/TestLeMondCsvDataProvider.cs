@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LeMondCsvToTcxConverter;
+using ConvertToTcx;
 using System.IO;
 
 namespace TestCsvToTcxConverter
@@ -11,33 +11,33 @@ namespace TestCsvToTcxConverter
     [TestClass]
     public class TestLeMondCsvDataProvider
     {
-        SourcedReader emptyFile = new SourcedReader()
+        SourcedStream emptyFile = new SourcedStream()
         {
-            TextReader = new StringReader(string.Empty),
+            Stream = Util.CreateStream(string.Empty),
             Source = "emptyFile"
         };
 
-        SourcedReader nonLeMondFile = new SourcedReader()
+        SourcedStream nonLeMondFile = new SourcedStream()
         {
-            TextReader = new StringReader("Armstrong,FW 1.00,HW 1.00,gforce,120102,16:31"),
+            Stream = Util.CreateStream("Armstrong,FW 1.00,HW 1.00,gforce,120102,16:31"),
             Source = "nonLeMondFile"
         };
 
-        SourcedReader nonRecognizedType = new SourcedReader()
+        SourcedStream nonRecognizedType = new SourcedStream()
         {
-            TextReader = new StringReader("LeMond"),
+            Stream = Util.CreateStream("LeMond"),
             Source = "nonRecognizedType"
         };
 
-        public SourcedReader gforceType = new SourcedReader()
+        public SourcedStream gforceType = new SourcedStream()
         {
-            TextReader = new StringReader("LeMond,,,gforce,120102,16:31\r\nTIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR"),
+            Stream = Util.CreateStream("LeMond,,,gforce,120102,16:31\r\nTIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR"),
             Source = "gforceType"
         };
 
-        public SourcedReader revolutionType = new SourcedReader()
+        public SourcedStream revolutionType = new SourcedStream()
         {
-            TextReader = new StringReader("LeMond,Revolution,,,30-Mar,18:33:17\r\nTIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET"),
+            Stream = Util.CreateStream("LeMond,Revolution,,,30-Mar,18:33:17\r\nTIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET"),
             Source = "revolutionType"
         };
 

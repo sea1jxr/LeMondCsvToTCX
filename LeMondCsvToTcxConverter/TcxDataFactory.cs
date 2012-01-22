@@ -4,20 +4,38 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
     public class TcxDataFactory
     {
-        private Func<SourcedReader, ITcxData> lemond;
-        private Func<SourcedReader, ITcxData> computrainer;
+        private Func<SourcedStream, ITcxData> lemond;
+        private Func<SourcedStream, ITcxData> computrainer;
 
-        public TcxDataFactory(Func<SourcedReader, ITcxData> lemond, Func<SourcedReader, ITcxData> computrainer)
+        public TcxDataFactory(Func<SourcedStream, ITcxData> lemond, Func<SourcedStream, ITcxData> computrainer)
         {
             this.lemond = lemond;
             this.computrainer = computrainer;
         }
+
+        public static TcxDataFactory CreateDefault()
+        {
+            Func<SourcedStream, ITcxData> lemond = (r) =>
+                {
+                    var provider = LeMondCsvDataProvider.Create(r);
+                    var reader = new LeMondDataReader(provider);
+                    return new LeMondTcxData(reader);
+                
+                };
+            Func<SourcedStream, ITcxData> computrainer = (r) =>
+                {
+                    var provider = new CompuTrainer3DPFileProvider(r);
+                    return new CompuTrainerTcxData(provider);
+                };
+
+            return new TcxDataFactory(lemond, computrainer);
+        }
         
-        public ITcxData Create(SourcedReader reader)
+        public ITcxData Create(SourcedStream reader)
         {
             string extension = Path.GetExtension(reader.Source);
             if (extension.Equals(".csv", StringComparison.OrdinalIgnoreCase))

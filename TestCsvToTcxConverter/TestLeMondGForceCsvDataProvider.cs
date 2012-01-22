@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LeMondCsvToTcxConverter;
+using ConvertToTcx;
 using System;
 using System.Linq;
 
@@ -9,18 +9,18 @@ namespace TestCsvToTcxConverter
     [TestClass]
     public class TestLeMondGForceCsvDataProvider
     {
-        SourcedReader wrongColumnHeadings = new SourcedReader();
-        SourcedReader goodOneDataPoint = new SourcedReader();
+        SourcedStream wrongColumnHeadings = new SourcedStream();
+        SourcedStream goodOneDataPoint = new SourcedStream();
         [TestInitialize]
         public void TestInitialize()
         {
-            wrongColumnHeadings.TextReader = new StringReader(
+            wrongColumnHeadings.Stream = Util.CreateStream(
 @"LeMond,FW 1.00,HW 1.00,gforce,120102,16:31
 TIMEz,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
 ");
             wrongColumnHeadings.Source = "wrongColumnHeadings";
 
-            goodOneDataPoint.TextReader = new StringReader(
+            goodOneDataPoint.Stream = Util.CreateStream(
 @"LeMond,FW 1.00,HW 1.00,gforce,120102,16:31
 TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
 00:00:01,2.0,3.0,4,5,6,7,8,9

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
     public class CompuTrainer3DPFileProvider 
     {
@@ -56,11 +56,11 @@ namespace LeMondCsvToTcxConverter
         private double speed_sum = 0.0;
         private double watts_sum = 0.0;
 
-        public CompuTrainer3DPFileProvider(Stream input, string source)
+        public CompuTrainer3DPFileProvider(SourcedStream sourced)
         {
-            this.input = new BinaryReader(input, Encoding.ASCII);
+            this.input = new BinaryReader(sourced.Stream, Encoding.ASCII);
 
-            ReadHeaderInfomation(source);
+            ReadHeaderInfomation(sourced.Source);
         }
 
         private void ReadHeaderInfomation(string source)
@@ -136,6 +136,7 @@ namespace LeMondCsvToTcxConverter
         public int UpperHeartRate { get { return upperHeartRate; } }
         public int LowerHeartRate { get { return lowerHeartRate; } }
 
+        public int SampleCount { get { return numberOfDataPoints; } }
 
         public IEnumerable<ComputrainerDataSample> Samples
         {
@@ -152,10 +153,10 @@ namespace LeMondCsvToTcxConverter
         {
             var sample = new ComputrainerDataSample();
             // 1 byte heart rate, in BPM
-            sample.HeartRate = input.ReadByte();
+            sample.HeartRateBpm = input.ReadByte();
 
             // 1 byte cadence, in RPM
-            sample.Cadence = input.ReadByte();
+            sample.CadenceRpm = input.ReadByte();
 
             // 2 unsigned bytes of watts
             sample.PowerWatts = input.ReadUInt16();
@@ -164,7 +165,7 @@ namespace LeMondCsvToTcxConverter
             sample.SpeedMph = input.ReadSingle() * 160;
 
             // 4 bytes of total elapsed time, in milliseconds
-            sample.ElapsedTimeMilisecond = input.ReadUInt32();
+            sample.TimeMilisecondElapsed = input.ReadUInt32();
 
             // 2 signed bytes of 100 * [percent grade]
             // (i.e., grade == 100 * 100 * rise/run !!)
@@ -174,7 +175,7 @@ namespace LeMondCsvToTcxConverter
             input.Skip(2);
 
             // 4 bytes of floating point total distance traveled, in KM
-            sample.DistanceKilometer = input.ReadSingle();
+            sample.DistanceKilometerElapsed = input.ReadSingle();
 
             // not sure what the next 28 bytes are.
             input.Skip(0x1c);
@@ -186,13 +187,13 @@ namespace LeMondCsvToTcxConverter
 
     public class ComputrainerDataSample
     {
-        public int HeartRate { get; set; }
-        public int Cadence { get; set; }
+        public int HeartRateBpm { get; set; }
+        public int CadenceRpm { get; set; }
         public int PowerWatts { get; set; }
         public float SpeedMph { get; set; }
-        public uint ElapsedTimeMilisecond { get; set; }
+        public uint TimeMilisecondElapsed { get; set; }
         public float GradePercent { get; set; }
-        public float DistanceKilometer { get; set; }
+        public float DistanceKilometerElapsed { get; set; }
     }
 
     public static class BinaryReaderExtensions

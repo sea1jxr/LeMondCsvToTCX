@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
-    public class SourcedReader
+    public class SourcedStream
     {
         public string Source { get; set; }
-        public TextReader TextReader { get; set; }
+        public Stream Stream { get; set; }
     }
 }

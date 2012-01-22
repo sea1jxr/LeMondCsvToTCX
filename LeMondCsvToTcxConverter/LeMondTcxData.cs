@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
     public class LeMondTcxData : ITcxData
     {
@@ -53,11 +53,11 @@ namespace LeMondCsvToTcxConverter
             {
                 Time = reader.StartTime + effectiveElapsedTime,
                 CadenceRpm = point.CadenceRotationsPerMinute,
-                ElapsedCalories = point.ElapsedCalories,
-                ElapsedDistanceMeters = ConvertMetric.KilometersToMeters(point.DistanceKilometers),
+                CaloriesElapsed = point.ElapsedCalories,
+                DistanceMetersElapsed = ConvertDistance.KilometersToMeters(point.DistanceKilometers),
                 HeartRateBpm = point.HeartRateBeatsPerMinute,
                 PowerWatts = point.PowerWatts,
-                SpeedMetersPerSecond = ConvertTime.HoursToSeconds(ConvertMetric.KilometersToMeters(point.SpeedKilometersPerHour)),
+                SpeedMetersPerSecond = ConvertTime.SecondsToHours(ConvertDistance.KilometersToMeters(point.SpeedKilometersPerHour)),
             };
         }
     }

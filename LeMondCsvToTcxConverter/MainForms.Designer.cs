@@ -1,4 +1,4 @@
-﻿namespace LeMondCsvToTcxConverter
+﻿namespace ConvertToTcx
 {
     partial class MainForms
     {
@@ -101,7 +101,7 @@
             this.Controls.Add(this.lstFiles);
             this.Controls.Add(this.btnCreateTcx);
             this.Name = "MainForms";
-            this.Text = "LeMondCsvToTcx";
+            this.Text = "ConvertToTcx";
             this.ResumeLayout(false);
 
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using LeMondCsvToTcxConverter;
+using ConvertToTcx;
 using Microsoft.VisualBasic.FileIO;
 
 namespace TestCsvToTcxConverter
@@ -12,18 +12,18 @@ namespace TestCsvToTcxConverter
     [TestClass]
     public class TestLeMondRevolutionCsvDataProvider
     {
-        SourcedReader wrongColumnHeadings = new SourcedReader();
-        SourcedReader goodOneDataPoint = new SourcedReader();
+        SourcedStream wrongColumnHeadings = new SourcedStream();
+        SourcedStream goodOneDataPoint = new SourcedStream();
         [TestInitialize]
         public void TestInitialize()
         {
-            wrongColumnHeadings.TextReader = new StringReader(
+            wrongColumnHeadings.Stream = Util.CreateStream(
 @"LeMond, Revolution,FW 50,HW 02,30-Mar,18:33:17,Alt 30,Temp 25,Hum 45,Tire 2105,CF 150
 TIMEz,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
 ");
             wrongColumnHeadings.Source = "wrongColumnHeadings";
 
-            goodOneDataPoint.TextReader = new StringReader(
+            goodOneDataPoint.Stream = Util.CreateStream(
 @"LeMond, Revolution,FW 50,HW 02,30-Mar,18:33:17,Alt 30,Temp 25,Hum 45,Tire 2105,CF 150
 TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
 0:00:01,2.0,3.0,4,5,6,7,0,,,

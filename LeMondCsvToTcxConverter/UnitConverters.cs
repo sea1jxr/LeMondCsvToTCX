@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
-    public static class ConvertMetric
+    public static class ConvertDistance
     {
         const int MetersPerKilometer = 1000;
+        const double KilometersPerMile = 1.609344;
         public static double KilometersToMeters(double kilometers)
         {
             return kilometers * MetersPerKilometer;
+        }
+
+        internal static double MilesToKilometers(double miles)
+        {
+            return miles * KilometersPerMile;
         }
     }
 
     public static class ConvertTime
     {
         const double HoursPerSecond = 1.0 / (60.0 * 60.0);
-        public static double HoursToSeconds(double hours)
+        public static double SecondsToHours(double seconds)
         {
-            return hours * HoursPerSecond;
+            return seconds * HoursPerSecond;
         }
     }
 }

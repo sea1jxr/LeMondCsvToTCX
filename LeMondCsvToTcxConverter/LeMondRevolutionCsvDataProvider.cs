@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
 
     /// <summary>

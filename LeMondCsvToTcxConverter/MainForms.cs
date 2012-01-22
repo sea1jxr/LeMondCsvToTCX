@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace LeMondCsvToTcxConverter
+namespace ConvertToTcx
 {
     public partial class MainForms : Form
     {
@@ -22,7 +22,7 @@ namespace LeMondCsvToTcxConverter
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = false;
             dialog.Title = "Find LeMond .csv files";
-            dialog.Filter = "LeMond Files (*.csv)|*.csv";
+            dialog.Filter = "Supported Files (*.csv;*.3dp)|*.csv;*.3dp|LeMond Files (*.csv)|*.csv|CompuTrainer (*.3dp)|*.3dp";
             dialog.FilterIndex = 1;
 
             var result = dialog.ShowDialog();
@@ -48,6 +48,7 @@ namespace LeMondCsvToTcxConverter
             dialog.FileName = Path.GetFileNameWithoutExtension((string)lstFiles.Items[0]);
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                List<SourcedStream> streams = new List<SourcedStream>();
                 try
                 {
                     using (TextWriter textWriter = new StreamWriter(dialog.FileName))
@@ -55,15 +56,27 @@ namespace LeMondCsvToTcxConverter
                         List<string> paths = new List<string>();
                         foreach (var item in lstFiles.Items)
                         {
-                            paths.Add((string)item);
+                            string path = (string)item;
+                            streams.Add(new SourcedStream() { Stream = new FileStream(path, FileMode.Open), Source = path });
                         }
-                        new Converter().WriteTcxFile(paths.Select(p => new SourcedReader() { Source = Path.GetFileName(p), TextReader = new StreamReader(p) }), textWriter);
+                        new Converter().WriteTcxFile(streams, textWriter);
                     }
-                    MessageBox.Show(string.Format("File '{0}' was created successfully", dialog.FileName));
+                    MessageBox.Show(string.Format("File '{0}' was created successfully", dialog.FileName), "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(this, String.Format("Error creating the TCX file: \r\n{0}\r\n\r\nDetails:\r\n{1}", ex.Message, ex.ToString()), "Error creating TCX file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    foreach (var sourcedStream in streams)
+                    {
+                        IDisposable disposable = sourcedStream.Stream as IDisposable;
+                        if (disposable != null)
+                        {
+                            disposable.Dispose();
+                        }
+                    }
                 }
             }
         }
