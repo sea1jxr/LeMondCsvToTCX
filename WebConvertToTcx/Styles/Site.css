@@ -140,6 +140,7 @@ first child of the left and right table columns */
 
 .upload
 {
+    padding-right: 10px;
     margin-bottom: 10px;
     clear: both;
 }
@@ -227,13 +228,13 @@ legend
 
 input.textEntry 
 {
-    width: 320px;
+    width: 100%;
     border: 1px solid #ccc;
 }
 
 input.passwordEntry 
 {
-    width: 320px;
+    width: 100%;
     border: 1px solid #ccc;
 }
 
@@ -244,6 +245,19 @@ div.accountInfo
 
 /* MISC  
 ----------------------------------------------------------*/
+
+.submitButton
+{
+
+    text-align: right;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+.flatButton
+{
+    border: 1px solid #ccc;
+}
 
 .clear
 {
@@ -293,8 +307,3 @@ div.accountInfo
     font-weight: bold;
 }
 
-.submitButton
-{
-    text-align: right;
-    padding-right: 10px;
-}
