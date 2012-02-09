@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Upload Test" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
+﻿<%@ Page Title="Convert To TCX application" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
     CodeBehind="Convert.aspx.cs" Inherits="WebConvertToTcx.Convert" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent" >
