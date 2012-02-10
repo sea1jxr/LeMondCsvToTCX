@@ -30,6 +30,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.vsmdi
 nCrunchTemp_*
+*.[Pp]ublish.xml
 
 #Ignore files build by NCrunch
 *.local.xml
