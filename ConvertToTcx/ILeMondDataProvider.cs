@@ -9,5 +9,9 @@ namespace ConvertToTcx
     {
         DateTime StartTime { get; }
         IEnumerable<LeMondCsvDataLine> DataLines { get; }
+
+        double ConvertSpeedToKilometersPerHour(double speed);
+        double ConvertDistanceToKilometers(double distance);
+
     }
 }

@@ -28,8 +28,8 @@ namespace ConvertToTcx
                     yield return new LeMondDataPoint()
                                     {
                                         ElapsedTime = TimeSpan.Parse(line.Time),
-                                        SpeedKilometersPerHour = double.Parse(line.Speed),
-                                        DistanceKilometers = double.Parse(line.Distance),
+                                        SpeedKilometersPerHour = provider.ConvertSpeedToKilometersPerHour(double.Parse(line.Speed)),
+                                        DistanceKilometers = provider.ConvertDistanceToKilometers(double.Parse(line.Distance)),
                                         PowerWatts = int.Parse(line.Power),
                                         HeartRateBeatsPerMinute = int.Parse(line.HeartRate),
                                         CadenceRotationsPerMinute = int.Parse(line.Rpm),

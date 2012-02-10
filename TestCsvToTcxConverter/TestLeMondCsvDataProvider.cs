@@ -35,6 +35,12 @@ namespace TestCsvToTcxConverter
             Source = "gforceType"
         };
 
+        public SourcedStream gforceSTNType = new SourcedStream()
+        {
+            Stream = Util.CreateStream("LeMond,,,STN,120102,16:31\r\nTIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR"),
+            Source = "gforceSTNType"
+        };
+
         public SourcedStream revolutionType = new SourcedStream()
         {
             Stream = Util.CreateStream("LeMond,Revolution,,,30-Mar,18:33:17\r\nTIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET"),
@@ -67,6 +73,13 @@ namespace TestCsvToTcxConverter
         {
             var provider = LeMondCsvDataProvider.Create(gforceType);
             Assert.AreEqual(typeof(LeMondGForceCsvDataProvider), provider.GetType());
+        }
+
+        [TestMethod]
+        public void TestCreatesGForceSTNType()
+        {
+            var provider = LeMondCsvDataProvider.Create(gforceSTNType);
+            Assert.AreEqual(typeof(LeMondGForceSTNCsvDataProvider), provider.GetType());
         }
 
         [TestMethod]

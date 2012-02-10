@@ -48,6 +48,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestLeMondGForceSTNCsvDataProvider.cs" />
     <Compile Include="TestTcxDataFactory.cs" />
     <Compile Include="TestCompuTrainer3DPFileProvider.cs" />
     <Compile Include="ExceptionAssert.cs" />

@@ -149,6 +149,22 @@ TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
             StringAssert.Contains(e.Message, "HH:MM");
         }
 
+        [TestMethod]
+        public void TestConvertSpeedToKilometersPerHour()
+        {
+            var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
+            var provider = new LeMondGForceCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
+            double d = provider.ConvertSpeedToKilometersPerHour(10.0);
+            Assert.AreEqual(10.0, d);
+        }
 
+        [TestMethod]
+        public void TestConvertDistanceToKilometers()
+        {
+            var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
+            var provider = new LeMondGForceCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
+            double d = provider.ConvertDistanceToKilometers(3.1);
+            Assert.AreEqual(3.1, d);
+        }
     }
 }

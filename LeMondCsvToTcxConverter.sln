@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeMondCsvToTcxConverter", "LeMondCsvToTcxConverter\LeMondCsvToTcxConverter.csproj", "{5F2CF072-11A7-4C24-8BCC-5D19E0479F0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormConvertToTcx", "LeMondCsvToTcxConverter\WinFormConvertToTcx.csproj", "{5F2CF072-11A7-4C24-8BCC-5D19E0479F0B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCsvToTcxConverter", "TestCsvToTcxConverter\TestCsvToTcxConverter.csproj", "{C7F9405A-18CA-4CC8-BDB7-EEA776EC7632}"
 EndProject

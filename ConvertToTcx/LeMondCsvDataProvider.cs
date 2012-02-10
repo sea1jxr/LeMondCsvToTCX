@@ -44,10 +44,14 @@ namespace ConvertToTcx
                 throw new Exception(string.Format("The file {0} does not seem to be a valid LeMond .csv file because it doesn't say 'LeMond' in the first field.", sourcedStream.Source));
             }
 
-            
+
             if (row.Length >= 4 && row[3] == "gforce")
             {
                 return new LeMondGForceCsvDataProvider(sourcedStream.Source, parser, row);
+            }
+            if (row.Length >= 4 && row[3] == "STN")
+            {
+                return new LeMondGForceSTNCsvDataProvider(sourcedStream.Source, parser, row);
             }
             else if (row.Length >= 2 && row[1] == "Revolution")
             {
@@ -56,6 +60,16 @@ namespace ConvertToTcx
 
             throw new Exception(string.Format("Not a recognized LeMond device. Header = '{0}'", string.Join(",", row)));
             
+        }
+
+        public virtual double ConvertSpeedToKilometersPerHour(double speed)
+        {
+            return speed;
+        }
+
+        public virtual double ConvertDistanceToKilometers(double distance)
+        {
+            return distance;
         }
 
         public IEnumerable<LeMondCsvDataLine> DataLines
