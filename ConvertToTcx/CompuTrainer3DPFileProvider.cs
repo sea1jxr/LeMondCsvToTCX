@@ -18,44 +18,6 @@ namespace ConvertToTcx
 
         private int numberOfDataPoints;
 
-
-        // we'll keep track of the altitude over time.  since computrainer
-        // gives us slope, we can calculate change in altitude if we know
-        // change in distance traveled, so we also need to keep track of
-        // the previous sample's distance.
-        private float altitude = 100.0f;  // arbitrary starting altitude of 100m
-        private float lastKM = 0;
-
-        // computrainer 3d software lets you start your ride partway into
-        // a course.  if you do this, then the first distance reported in
-        // the corresponding log file will be that offset, rather than
-        // zero.  so, we'll stash away the first reported distance, and
-        // use that to offset distances that we report to GC so that they
-        // are zero-based (i.e., so that the first data point is at
-        // distance zero).
-        private float firstKM = 0;
-        private bool gotFirstKM = false;
-
-        // computrainer doesn't have a fixed inter-sample-interval; GC
-        // expects one, and estimating one by averaging causes problems
-        // for some calculations that GC does.  also, computrainer samples
-        // so frequently (once every 30-50ms) that the O(n^2) critical
-        // power plot calculation takes waaaaay too long.  to solve both
-        // problems at once, we smooth the file, emitting an averaged data
-        // point every 250 milliseconds.
-        //
-        // for HR, cadence, watts, and speed, we'll do time averaging to
-        // figure out the correct average since the last emitted point.
-        // for distance and altitude, we just need to interpolate from the
-        // last data point in the computrainer file itself.
-        private float lastAltitude = 100.0f;
-        private uint lastEmittedMS = 0;
-        private uint lastSampleMS = 0;
-        private double hr_sum = 0.0;
-        private double cad_sum = 0.0;
-        private double speed_sum = 0.0;
-        private double watts_sum = 0.0;
-
         public CompuTrainer3DPFileProvider(SourcedStream sourced)
         {
             this.input = new BinaryReader(sourced.Stream, Encoding.ASCII);

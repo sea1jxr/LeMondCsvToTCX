@@ -37,7 +37,7 @@ namespace TestCsvToTcxConverter
 
         public SourcedStream gforceSTNType = new SourcedStream()
         {
-            Stream = Util.CreateStream("LeMond,,,STN,120102,16:31\r\nTIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR"),
+            Stream = Util.CreateStream("LeMond,FW 0.25,,STN,120102,16:31\r\nTIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR"),
             Source = "gforceSTNType"
         };
 

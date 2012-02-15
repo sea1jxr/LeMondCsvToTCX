@@ -76,20 +76,39 @@ namespace ConvertToTcx
         {
             get
             {
+                int rowCount = 0;
+                string [] row = null;
+                // the LeMond devices tend to cut off data on the final
+                // line of data, that is ok, but we will error if data is
+                // missing in the middle of the file.
+                bool previousLineWasMissingColumns = false;
                 while (!Parser.EndOfData)
                 {
-                    var row = Parser.ReadFields();
-                    var data = new LeMondCsvDataLine()
+                    if (previousLineWasMissingColumns)
                     {
-                        Time = row[0],
-                        Speed = row[1],
-                        Distance = row[2],
-                        Power = row[3],
-                        HeartRate = row[4],
-                        Rpm = row[5],
-                        Calories = row[6]
-                    };
-                    yield return data;
+                        throw new Exception(string.Format("Missing data on row {0}.  Only {1} field(s) were found of the 7 needed. \r\nRow Data: {2}", rowCount, row.Length, string.Join(",", row)));
+                    }
+
+                    row = Parser.ReadFields();
+                    rowCount++;
+                    if (row.Length >= 7)
+                    {
+                        var data = new LeMondCsvDataLine()
+                        {
+                            Time = row[0],
+                            Speed = row[1],
+                            Distance = row[2],
+                            Power = row[3],
+                            HeartRate = row[4],
+                            Rpm = row[5],
+                            Calories = row[6]
+                        };
+                        yield return data;
+                    }
+                    else
+                    {
+                        previousLineWasMissingColumns = true;
+                    }
                 }
             }
         }

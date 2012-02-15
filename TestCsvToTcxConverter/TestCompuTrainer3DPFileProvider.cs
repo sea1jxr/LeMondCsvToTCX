@@ -46,11 +46,12 @@ namespace TestCsvToTcxConverter
                     Assert.AreEqual(124, point.HeartRateBpm);
                     Assert.AreEqual(359, point.PowerWatts);
                     Assert.AreEqual(22.48, Math.Round(point.SpeedMph, 2));
-                    foundPoint1 = true;
+                    foundPoint2 = true;
                 }
-            
-
             }
+
+            Assert.IsTrue(foundPoint1);
+            Assert.IsTrue(foundPoint2);
         }
 
     }

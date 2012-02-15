@@ -14,13 +14,19 @@ namespace ConvertToTcx
     /// </summary>
     public class LeMondGForceSTNCsvDataProvider : LeMondCsvDataProvider
     {
+        // default to the 0.25 version
+        private double firmwareVersion = 0.25;
+
         public LeMondGForceSTNCsvDataProvider(string sourceName, TextFieldParser parser, string[] firstRow)
             :base(parser)
         {
+
             if (firstRow.Length < 6)
             {
                 throw new Exception(string.Format("Invalid gforce STN header. Header = '{0}'", string.Join(",", firstRow)));
             }
+
+            firmwareVersion = LeMondGForceSTNCsvDataProvider.ParseFirmwareVersion(firstRow[1]);
 
             int year, month, day;
             LeMondGForceCsvDataProvider.ParseDate(firstRow[4], out year, out month, out day);
@@ -47,15 +53,44 @@ namespace ConvertToTcx
             }
         }
 
+        private static double ParseFirmwareVersion(string firmwareVersionValue)
+        {
+         
+            double version;
+            if (firmwareVersionValue.Length < 7 ||
+                firmwareVersionValue.Substring(0, 3) != "FW " ||
+                !double.TryParse(firmwareVersionValue.Substring(3), out version))
+            {
+                throw new Exception(string.Format("The firmware version was not in the correct format, expected 'FW 0.00' and got '{0}'", firmwareVersionValue));
+            }
+
+            return version;
+        }
+
         public override double ConvertDistanceToKilometers(double distance)
         {
-            return ConvertDistance.MilesToKilometers(distance);
+            if (ContainsEnglishUnits)
+            {
+                return ConvertDistance.MilesToKilometers(distance);
+            }
+
+            return distance;
         }
 
         public override double ConvertSpeedToKilometersPerHour(double speed)
         {
-            // m/h * k/m
-            return ConvertDistance.MilesToKilometers(speed);
+            if (ContainsEnglishUnits)
+            {
+                // m/h * k/m
+                return ConvertDistance.MilesToKilometers(speed);
+            }
+
+            return speed;
+        }
+
+        private bool ContainsEnglishUnits
+        {
+            get { return firmwareVersion < 0.31; }
         }
     }
 }

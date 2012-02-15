@@ -9,6 +9,7 @@ namespace TestCsvToTcxConverter
     [TestClass]
     public class TestLeMondGForceSTNCsvDataProvider
     {
+        const string Version0_31 = "FW 0.31";
         SourcedStream wrongColumnHeadings = new SourcedStream();
         SourcedStream goodOneDataPoint = new SourcedStream();
         [TestInitialize]
@@ -58,7 +59,7 @@ TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
         }
 
         [TestMethod]
-        public void TestConvertSpeedToKilometersPerHour()
+        public void TestFW25ConvertSpeedToKilometersPerHour()
         {
             var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
             var provider = new LeMondGForceSTNCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
@@ -67,12 +68,32 @@ TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
         }
 
         [TestMethod]
-        public void TestConvertDistanceToKilometers()
+        public void TestFW31ConvertSpeedToKilometersPerHour()
+        {
+            var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
+            h.FirstRow[1] = Version0_31;
+            var provider = new LeMondGForceSTNCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
+            double d = provider.ConvertSpeedToKilometersPerHour(6.2);
+            Assert.AreEqual(6.2, Math.Round(d, 1));
+        }
+
+        [TestMethod]
+        public void TestFW25ConvertDistanceToKilometers()
         {
             var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
             var provider = new LeMondGForceSTNCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
             double d = provider.ConvertDistanceToKilometers(3.1);
             Assert.AreEqual(5.0, Math.Round(d, 1));
+        }
+
+        [TestMethod]
+        public void TestFW31ConvertDistanceToKilometers()
+        {
+            var h = new LeMondConcreateProviderCtorHelper(goodOneDataPoint);
+            h.FirstRow[1] = Version0_31;
+            var provider = new LeMondGForceSTNCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
+            double d = provider.ConvertDistanceToKilometers(3.1);
+            Assert.AreEqual(3.1, Math.Round(d, 1));
         }
     }
 }

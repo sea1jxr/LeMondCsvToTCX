@@ -11,6 +11,8 @@ namespace TestCsvToTcxConverter
     {
         SourcedStream wrongColumnHeadings = new SourcedStream();
         SourcedStream goodOneDataPoint = new SourcedStream();
+        SourcedStream missingColumnsLastRow = new SourcedStream();
+        SourcedStream missingColumnsMiddleRow = new SourcedStream();
         [TestInitialize]
         public void TestInitialize()
         {
@@ -26,9 +28,24 @@ TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
 00:00:01,2.0,3.0,4,5,6,7,8,9
 ");
             goodOneDataPoint.Source = "goodOneDataPoint";
+
+            missingColumnsLastRow.Stream = Util.CreateStream(
+@"LeMond,FW 1.00,HW 1.00,gforce,120102,16:31
+TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
+00:00:01,2.0,3.0,4,5,6,7,8,9
+00:00:02,2.0,3.0
+");
+            missingColumnsLastRow.Source = "missingColumnsLastRow";
+
+        // this will be an error
+        missingColumnsMiddleRow.Stream = Util.CreateStream(
+@"LeMond,FW 1.00,HW 1.00,gforce,120102,16:31
+TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
+00:00:01,2.0,3.0
+00:00:02,2.0,3.0,4,5,6,7,8,9
+");
+            missingColumnsMiddleRow.Source = "missingColumnsMiddleRow";
         }
-
-
 
         [TestMethod]
         public void ErrorOnWrongDataColumnHeadingsFile()
@@ -57,6 +74,38 @@ TIME,SPEED,DIST,POWER,HEART RATE,RPM,CALORIES,TORQUE,TARGET HR
             Assert.AreEqual(line.Calories, "7");
         }
 
+        [TestMethod]
+        public void TestMissingColumnsOnLastRow()
+        {
+            var h = new LeMondConcreateProviderCtorHelper(missingColumnsLastRow);
+            var provider = new LeMondGForceCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
+            Assert.AreEqual(new DateTime(2012, 01, 02, 16, 31, 0, DateTimeKind.Local), provider.StartTime);
+
+            // lines
+            // Single() will make sure we have one and only one line
+            var line = provider.DataLines.Single();
+            Assert.AreEqual(line.Time, "00:00:01");
+            Assert.AreEqual(line.Speed, "2.0");
+            Assert.AreEqual(line.Distance, "3.0");
+            Assert.AreEqual(line.Power, "4");
+            Assert.AreEqual(line.HeartRate, "5");
+            Assert.AreEqual(line.Rpm, "6");
+            Assert.AreEqual(line.Calories, "7");
+        }
+
+        [TestMethod]
+        public void ErrorOnMissingColumnsOnMiddleRow()
+        {
+            var h = new LeMondConcreateProviderCtorHelper(missingColumnsMiddleRow);
+            var provider = new LeMondGForceCsvDataProvider(h.SourceName, h.Parser, h.FirstRow);
+            Assert.AreEqual(new DateTime(2012, 01, 02, 16, 31, 0, DateTimeKind.Local), provider.StartTime);
+
+            // lines
+            Exception e = ExceptionAssert.Throws<Exception>(() => provider.DataLines.Single());
+            StringAssert.Contains(e.Message, "Missing data on row 1");
+        }
+        
+        
         int year, month, day, hour, minute;
         [TestMethod]
         public void ErrorOnDateToShort()
