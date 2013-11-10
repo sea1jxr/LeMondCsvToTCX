@@ -87,6 +87,16 @@ TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
         }
 
         [TestMethod]
+        public void TestSingleDigitHour()
+        {
+            LeMondRevolutionCsvDataProvider.ParseTime("9:43:20", out hour, out minute, out second);
+            Assert.AreEqual(9 ,hour);
+            Assert.AreEqual(43, minute);
+            Assert.AreEqual(20, second);
+
+        }
+
+        [TestMethod]
         public void ErrorOnDateToShort()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseDate("12", out year, out month, out day));
@@ -132,49 +142,49 @@ TIME,SPEED,DIST,POWER,HEART RATE,CADENCE,CALORIES,TARGET,,,
         public void ErrorOnTimeToShort()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime("12", out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "[H]H:MM:SS");
         }
 
         [TestMethod]
         public void ErrorOnTimeToLong()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime("12::34::33", out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "[H]H:MM:SS");
         }
 
         [TestMethod]
         public void ErrorOnTimeEmpty()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime("", out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "[H]H:MM:SS");
         }
 
         [TestMethod]
         public void ErrorOnTimeNull()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime(null, out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "Unable to find a time value");
         }
 
         [TestMethod]
         public void ErrorOnHourNotNumerical()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime("ab:30", out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "[H]H:MM:SS");
         }
 
         [TestMethod]
         public void ErrorOnMinuteNotNumerical()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime("10:cd", out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "[H]H:MM:SS");
         }
 
         [TestMethod]
         public void ErrorOnSecondNotNumerical()
         {
             Exception e = ExceptionAssert.Throws<Exception>(() => LeMondRevolutionCsvDataProvider.ParseTime("10:30:ef", out hour, out minute, out second));
-            StringAssert.Contains(e.Message, "HH:MM:SS");
+            StringAssert.Contains(e.Message, "[H]H:MM:SS");
         }
     }
 }

@@ -109,18 +109,25 @@ namespace ConvertToTcx
 
         public static void ParseTime(string time, out int hour, out int minute, out int sec)
         {
-            if (time == null || time.Length != 8 || time.IndexOf(':') != 2 || time.LastIndexOf(':') != 5)
+            if (time == null)
             {
-                throw new Exception("The start time is not in the correct format, it is expected to be in a 'HH:MM:SS' format");
+                throw new Exception("Unable to find a time value");
             }
 
-            if (!(int.TryParse(time.Substring(0, 2), out hour) && 
-                  int.TryParse(time.Substring(3, 2), out minute) &&
-                  int.TryParse(time.Substring(6, 2), out sec)
+            int hourMinuteSeperator = time.IndexOf(':');
+            int minuteSecondSeperator = time.LastIndexOf(':');
+            if (time.Length < 7 || time.Length > 8  || (hourMinuteSeperator != 1 && hourMinuteSeperator != 2)  || (minuteSecondSeperator != 4 && minuteSecondSeperator != 5))
+            {
+                throw new Exception("The start time is not in the correct format, it is expected to be in a '[H]H:MM:SS' format");
+            }
+
+            if (!(int.TryParse(time.Substring(0, hourMinuteSeperator), out hour) && 
+                  int.TryParse(time.Substring(hourMinuteSeperator + 1, 2), out minute) &&
+                  int.TryParse(time.Substring(minuteSecondSeperator + 1, 2), out sec)
                  )
                )
             {
-                throw new Exception("The start time is not in the correct format, it is expected to be in a 'HH:MM:SS' format where the HH and MM are integers");
+                throw new Exception("The start time is not in the correct format, it is expected to be in a '[H]H:MM:SS' format where the HH and MM are integers");
             }
         }
     }
