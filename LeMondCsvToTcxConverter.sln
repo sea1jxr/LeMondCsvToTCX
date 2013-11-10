@@ -1,16 +1,16 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormConvertToTcx", "LeMondCsvToTcxConverter\WinFormConvertToTcx.csproj", "{5F2CF072-11A7-4C24-8BCC-5D19E0479F0B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCsvToTcxConverter", "TestCsvToTcxConverter\TestCsvToTcxConverter.csproj", "{C7F9405A-18CA-4CC8-BDB7-EEA776EC7632}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89B808C0-2C5A-4306-9606-C1A5ED93A60F}"
 	ProjectSection(SolutionItems) = preProject
 		LeMondCsvToTcxConverter.vsmdi = LeMondCsvToTcxConverter.vsmdi
 		Local.testsettings = Local.testsettings
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormConvertToTcx", "LeMondCsvToTcxConverter\WinFormConvertToTcx.csproj", "{5F2CF072-11A7-4C24-8BCC-5D19E0479F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCsvToTcxConverter", "TestCsvToTcxConverter\TestCsvToTcxConverter.csproj", "{C7F9405A-18CA-4CC8-BDB7-EEA776EC7632}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebConvertToTcx", "WebConvertToTcx\WebConvertToTcx.csproj", "{C2176630-3C3C-4DAC-A952-CDBF30A3B717}"
 EndProject
