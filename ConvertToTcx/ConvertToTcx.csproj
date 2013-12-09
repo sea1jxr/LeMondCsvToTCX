@@ -44,6 +44,7 @@
     <Compile Include="CompuTrainer3DPFileProvider.cs" />
     <Compile Include="CompuTrainerTcxData.cs" />
     <Compile Include="Converter.cs" />
+    <Compile Include="CompuTrainerTXTFileProvider.cs" />
     <Compile Include="LeMondGForceSTNCsvDataProvider.cs" />
     <Compile Include="ILeMondDataProvider.cs" />
     <Compile Include="ITcxData.cs" />

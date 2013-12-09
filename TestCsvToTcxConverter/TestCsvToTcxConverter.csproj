@@ -61,6 +61,7 @@
     <Compile Include="TestLeMondDataReader.cs" />
     <Compile Include="TestLeMondRevolutionCsvDataProvider.cs" />
     <Compile Include="TestTcxWriter.cs" />
+    <Compile Include="TestCompuTrainerTXTFileProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Samples\CompuTrainer\John-CompuTrainer_TimeTrial-2012-01-04-21-44-16.3dp">

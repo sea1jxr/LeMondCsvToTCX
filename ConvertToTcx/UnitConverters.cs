@@ -7,8 +7,8 @@ namespace ConvertToTcx
 {
     public static class ConvertDistance
     {
-        const int MetersPerKilometer = 1000;
-        const double KilometersPerMile = 1.609344;
+        public const int MetersPerKilometer = 1000;
+        public const float KilometersPerMile = 1.609344F;
         public static double KilometersToMeters(double kilometers)
         {
             return kilometers * MetersPerKilometer;
