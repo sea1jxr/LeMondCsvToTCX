@@ -5,11 +5,18 @@ using System.Text;
 
 namespace ConvertToTcx
 {
+    public interface IComputrainerProvider
+    {
+        DateTime StartTime { get; }
+        int SampleCount { get; }
+        IEnumerable<ComputrainerDataSample> Samples { get; }
+    }
+
     public class CompuTrainerTcxData : ITcxData
     {
-        private CompuTrainer3DPFileProvider provider;   
+        private IComputrainerProvider provider;
 
-        public CompuTrainerTcxData(CompuTrainer3DPFileProvider provider)
+        public CompuTrainerTcxData(IComputrainerProvider provider)
         {
             this.provider = provider;
         }

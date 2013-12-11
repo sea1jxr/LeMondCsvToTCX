@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace ConvertToTcx
 {
-    public class CompuTrainerTXTFileProvider 
+    public class CompuTrainerTXTFileProvider : IComputrainerProvider
     {
         private StreamReader input;
         private string userName;
@@ -97,6 +97,7 @@ namespace ConvertToTcx
         {
             Regex delimeterRegex = new Regex("( +|,)");
             int msIndex = -1;
+            int milesIndex = -1;
             int wattsIndex = -1;
             int rpmIndex = -1;
             int speedIndex = -1;
@@ -114,13 +115,18 @@ namespace ConvertToTcx
                 rpmIndex = GetIndex(labels, "rpm");
                 speedIndex = GetIndex(labels, "speed");
                 hrIndex = GetIndex(labels, "hr");
-                kmIndex = GetIndex(labels, "KM");
+                kmIndex = GetIndex(labels, "KM", false);
+                milesIndex = GetIndex(labels, "miles", false);
+                if (kmIndex < 0 && milesIndex < 0)
+                {
+                    throw new Exception("didn't find KM or miles fields.  At least one of them must be present");
+                }
             }
 
-            int GetIndex(List<string> labels, string labelToFind)
+            int GetIndex(List<string> labels, string labelToFind, bool errorIfMissing = true)
             {
                 int index = labels.IndexOf(labelToFind);
-                if (index < 0)
+                if (errorIfMissing && index < 0)
                 {
                     throw new Exception(string.Format("File is missing the '{0}' data field", labelToFind));
                 }
@@ -139,22 +145,70 @@ namespace ConvertToTcx
                             line = this.input.ReadLine();
                         }
 
-                        var values = this.delimeterRegex.Split(line).Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
+                        if (line == null)
+                        {
+                            break;
+                        }
+
+                        var split = this.delimeterRegex.Split(line);
+                        var valuesEnumeration = split.Where((s, i) => i % 2 == 0);
+                        // in the space delemited case we get an empty string for a first value.
+                        if (valuesEnumeration.First() == "")
+                        {
+                            valuesEnumeration = valuesEnumeration.Skip(1);
+                        }
+                        var values = valuesEnumeration.ToList();
+                        
+
+                        float distanceKilometerElapsed;
+                        if (kmIndex > 0)
+                        {
+                            distanceKilometerElapsed = GetValue(values, kmIndex, Convert.ToSingle, "km");
+                        }
+                        else
+                        {
+                            distanceKilometerElapsed = GetValue(values, milesIndex, Convert.ToSingle, "miles");
+                            distanceKilometerElapsed = ConvertDistance.MilesToKilometers(distanceKilometerElapsed);
+                        }
+
                         yield return new ComputrainerDataSample()
                         {
-                            TimeMilisecondElapsed = Convert.ToUInt32(values[msIndex]),
-                            HeartRateBpm = Convert.ToInt32(values[hrIndex]),
-                            CadenceRpm = Convert.ToInt32(values[rpmIndex]),
-                            PowerWatts = Convert.ToInt32(values[wattsIndex]),
-                            SpeedMph = Convert.ToSingle(values[speedIndex])/ConvertDistance.KilometersPerMile,
-                            DistanceKilometerElapsed = Convert.ToSingle(values[kmIndex])
+                            TimeMilisecondElapsed = GetValue(values, msIndex, Convert.ToUInt32, "ms"),
+                            HeartRateBpm = GetValue(values, hrIndex, Convert.ToInt32, "hr"),
+                            CadenceRpm = GetValue(values, rpmIndex, Convert.ToInt32, "rpm"),
+                            PowerWatts = GetValue(values, wattsIndex, (s) => Convert.ToInt32(Convert.ToSingle(s)), "watts"),
+                            SpeedMph = GetValue(values, speedIndex, Convert.ToSingle, "speed") / ConvertDistance.KilometersPerMile,
+                            DistanceKilometerElapsed = distanceKilometerElapsed
                         };
 
                         line = this.input.ReadLine();
                     }
 
                 }
+            }
 
+            T GetValue<T>(List<string> values, int index, Func<string, T> parser, string fieldName)
+            {
+                string stringValue = "noval";
+                try
+                {
+                    stringValue = values[index];
+                    stringValue = Unquote(stringValue);
+                    return parser(stringValue);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(string.Format("Error parsering field '{0}' with value '{1}'.", fieldName, stringValue), e);
+                }
+            }
+
+            private string Unquote(string input)
+            {
+                if (input.Length >= 2 && input[0] == '"' && input[input.Length - 1] == '"')
+                {
+                    return input.Substring(1, input.Length - 2);
+                }
+                return input;
             }
         }
     }

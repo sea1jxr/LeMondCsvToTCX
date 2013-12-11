@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ConvertToTcx
 {
-    public class CompuTrainer3DPFileProvider 
+    public class CompuTrainer3DPFileProvider : IComputrainerProvider
     {
         private BinaryReader input;
         private string userName;

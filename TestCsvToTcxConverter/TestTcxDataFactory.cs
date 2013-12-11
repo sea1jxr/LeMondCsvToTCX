@@ -12,9 +12,11 @@ namespace TestCsvToTcxConverter
     public class TestTcxDataFactory
     {
         SourcedStream lemondReader = new SourcedStream() { Source = "joe.csv", Stream = Util.CreateStream(string.Empty) };
-        SourcedStream computrainerReader = new SourcedStream() { Source = "joe.3dp", Stream = Util.CreateStream(string.Empty) };
+        SourcedStream computrainer3DPReader = new SourcedStream() { Source = "joe.3dp", Stream = Util.CreateStream(string.Empty) };
+        SourcedStream computrainerTXTReader = new SourcedStream() { Source = "joe.CdF.txt", Stream = Util.CreateStream(string.Empty) };
         TestTcxData lemondData = new TestTcxData();
-        TestTcxData computrainerData = new TestTcxData();
+        TestTcxData computrainer3DPData = new TestTcxData();
+        TestTcxData computrainerTXTData = new TestTcxData();
 
         TcxDataFactory testFactory;
         
@@ -29,15 +31,20 @@ namespace TestCsvToTcxConverter
                 },
                 (r) =>
                 {
-                    computrainerData.Reader = r;
-                    return computrainerData;
+                    computrainer3DPData.Reader = r;
+                    return computrainer3DPData;
+                },
+                (r) =>
+                {
+                    computrainerTXTData.Reader = r;
+                    return computrainerTXTData;
                 });
         }
 
         [TestMethod]
         public void ErrorOnBadExtension()
         {
-           var factory = new TcxDataFactory(null, null);
+           var factory = new TcxDataFactory(null, null, null);
            Exception e = ExceptionAssert.Throws<Exception>(() => factory.Create(new SourcedStream() { Source = "joe.zzz" }));
            StringAssert.Contains(e.Message, ".zzz");
            StringAssert.Contains(e.Message, "not a supported file type");
@@ -52,11 +59,19 @@ namespace TestCsvToTcxConverter
         }
 
         [TestMethod]
-        public void CreatesCompuTrainerTcxData()
+        public void CreatesCompuTrainer3DPTcxData()
         {
-            var actualData = testFactory.Create(computrainerReader);
-            Assert.AreSame(computrainerData, actualData);
-            Assert.AreSame(computrainerReader, ((TestTcxData)actualData).Reader);
+            var actualData = testFactory.Create(computrainer3DPReader);
+            Assert.AreSame(computrainer3DPData, actualData);
+            Assert.AreSame(computrainer3DPReader, ((TestTcxData)actualData).Reader);
+        }
+
+        [TestMethod]
+        public void CreatesCompuTrainerTXTTcxData()
+        {
+            var actualData = testFactory.Create(computrainerTXTReader);
+            Assert.AreSame(computrainerTXTData, actualData);
+            Assert.AreSame(computrainerTXTReader, ((TestTcxData)actualData).Reader);
         }
 
         private class TestTcxData : ITcxData

@@ -22,7 +22,7 @@ namespace ConvertToTcx
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = false;
             dialog.Title = "Find LeMond .csv files";
-            dialog.Filter = "Supported Files (*.csv;*.3dp)|*.csv;*.3dp|LeMond Files (*.csv)|*.csv|CompuTrainer (*.3dp)|*.3dp";
+            dialog.Filter = "Supported Files (*.csv;*.3dp;*.cdf.txt)|*.csv;*.3dp;*.cdf.txt|LeMond Files (*.csv)|*.csv|CompuTrainer (*.3dp)|*.3dp|Computrainer Coach (*.cdf.txt)|*.cdf.txt";
             dialog.FilterIndex = 1;
 
             var result = dialog.ShowDialog();

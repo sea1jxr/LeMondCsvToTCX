@@ -14,7 +14,12 @@ namespace ConvertToTcx
             return kilometers * MetersPerKilometer;
         }
 
-        internal static double MilesToKilometers(double miles)
+        public static float MilesToKilometers(float miles)
+        {
+            return miles * KilometersPerMile;
+        }
+
+        public static double MilesToKilometers(double miles)
         {
             return miles * KilometersPerMile;
         }
